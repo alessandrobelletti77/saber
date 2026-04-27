@@ -68,7 +68,7 @@ class _TranslationsHomeIt extends TranslationsHomeEn {
 	@override late final _TranslationsHomeTitlesIt titles = _TranslationsHomeTitlesIt._(_root);
 	@override late final _TranslationsHomeTooltipsIt tooltips = _TranslationsHomeTooltipsIt._(_root);
 	@override late final _TranslationsHomeCreateIt create = _TranslationsHomeCreateIt._(_root);
-	@override String get welcome => 'Benvenuto su Saber';
+	@override String get welcome => 'Benvenuto su DODO NOTES';
 	@override String get invalidFormat => 'Il file selezionato non è supportato. Seleziona un file sbn, sbn2, sba o pdf.';
 	@override String get noFiles => 'Nessun file trovato';
 	@override String get noPreviewAvailable => 'Nessuna anteprima disponibile';
@@ -115,7 +115,7 @@ class _TranslationsSettingsIt extends TranslationsSettingsEn {
 	];
 	@override late final _TranslationsSettingsResetIt reset = _TranslationsSettingsResetIt._(_root);
 	@override String get resyncEverything => 'Risincronizza tutto';
-	@override String get openDataDir => 'Apri cartella Saber';
+	@override String get openDataDir => 'Apri cartella DODO NOTES';
 	@override late final _TranslationsSettingsCustomDataDirIt customDataDir = _TranslationsSettingsCustomDataDirIt._(_root);
 	@override String get autosaveDisabled => 'Mai';
 	@override String get shapeRecognitionDisabled => 'Mai';
@@ -377,7 +377,7 @@ class _TranslationsSentryConsentIt extends TranslationsSentryConsentEn {
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Vuoi aiutarci a migliorare Saber?';
+	@override String get title => 'Vuoi aiutarci a migliorare DODO NOTES?';
 	@override late final _TranslationsSentryConsentDescriptionIt description = _TranslationsSentryConsentDescriptionIt._(_root);
 	@override late final _TranslationsSentryConsentAnswersIt answers = _TranslationsSentryConsentAnswersIt._(_root);
 }
@@ -409,7 +409,7 @@ class _TranslationsSettingsPrefLabelsIt extends TranslationsSettingsPrefLabelsEn
 	@override String get layoutSize => 'Dimensione del layout';
 	@override String get customAccentColor => 'Colore personalizzato';
 	@override String get hyperlegibleFont => 'Font Atkinson Hyperlegible';
-	@override String get shouldCheckForUpdates => 'Controlla automaticamente gli aggiornamenti di Saber';
+	@override String get shouldCheckForUpdates => 'Controlla automaticamente gli aggiornamenti di DODO NOTES';
 	@override String get shouldAlwaysAlertForUpdates => 'Aggiornamenti precoci';
 	@override String get allowInsecureConnections => 'Consenti connessioni non sicure';
 	@override String get editorToolbarAlignment => 'Posizione barra degli strumenti';
@@ -429,7 +429,7 @@ class _TranslationsSettingsPrefLabelsIt extends TranslationsSettingsPrefLabelsEn
 	@override String get shapeRecognitionDelay => 'Ritardo nel riconoscimento della forma';
 	@override String get autoStraightenLines => 'Raddrizzamento automatico delle linee';
 	@override String get simplifiedHomeLayout => 'Layout semplificato della schermata home';
-	@override String get customDataDir => 'Cartella Saber personalizzata';
+	@override String get customDataDir => 'Cartella DODO NOTES personalizzata';
 	@override String get sentry => 'Segnalazione di errori';
 }
 
@@ -441,7 +441,7 @@ class _TranslationsSettingsPrefDescriptionsIt extends TranslationsSettingsPrefDe
 
 	// Translations
 	@override String get hyperlegibleFont => 'Migliora la leggibilità per i lettori ipovedenti';
-	@override String get allowInsecureConnections => '(Non consigliato) Consenti a Saber di connettersi ai server con certificati autofirmati/non attendibili';
+	@override String get allowInsecureConnections => '(Non consigliato) Consenti a DODO NOTES di connettersi ai server con certificati autofirmati/non attendibili';
 	@override String get preferGreyscale => 'Per display e-ink';
 	@override String get autoClearWhiteboardOnExit => 'Pulisce la lavagna alla chiusura dell\'app';
 	@override String get disableEraserAfterUse => 'Torna automaticamente alla penna dopo aver utilizzato la gomma';
@@ -553,10 +553,10 @@ class _TranslationsLoginNcLoginStepIt extends TranslationsLoginNcLoginStepEn {
 
 	// Translations
 	@override String get whereToStoreData => 'Scegli dove vuoi archiviare i tuoi dati:';
-	@override String get saberNcServer => 'Il server Nextcloud di Saber';
+	@override String get saberNcServer => 'Il server Nextcloud di DODO NOTES';
 	@override String get otherNcServer => 'Altro server Nextcloud';
 	@override String get serverUrl => 'URL Server';
-	@override String get loginWithSaber => 'Accedi con Saber';
+	@override String get loginWithSaber => 'Accedi con DODO NOTES';
 	@override String get loginWithNextcloud => 'Accedi con Nextcloud';
 	@override late final _TranslationsLoginNcLoginStepLoginFlowIt loginFlow = _TranslationsLoginNcLoginStepLoginFlowIt._(_root);
 }
@@ -569,7 +569,7 @@ class _TranslationsLoginEncLoginStepIt extends TranslationsLoginEncLoginStepEn {
 
 	// Translations
 	@override String get enterEncPassword => 'Per proteggere i tuoi dati, inserisci la tua password di cifratura:';
-	@override String get newToSaber => 'Nuovo su Saber? Basta inserire una nuova password di cifratura.';
+	@override String get newToSaber => 'Nuovo su DODO NOTES? Basta inserire una nuova password di cifratura.';
 	@override String get encPassword => 'Password di cifratura';
 	@override String get encFaqTitle => 'Domande frequenti';
 	@override String get wrongEncPassword => 'La decrittazione non è riuscita con la password fornita. Per favore prova a inserirla nuovamente.';
@@ -611,7 +611,7 @@ class _TranslationsProfile$faq$0i1$It extends TranslationsProfile$faq$0i1$En {
 
 	// Translations
 	@override String get q => 'Come cambio la mia password Nextcloud?';
-	@override String get a => 'Vai al sito web del tuo server e accedi. Quindi vai in Impostazioni > Sicurezza > Cambia password. Dovrai disconnetterti e riconnetterti a Saber dopo aver cambiato la tua password.';
+	@override String get a => 'Vai al sito web del tuo server e accedi. Quindi vai in Impostazioni > Sicurezza > Cambia password. Dovrai disconnetterti e riconnetterti a DODO NOTES dopo aver cambiato la tua password.';
 }
 
 // Path: profile.faq.2
@@ -622,7 +622,7 @@ class _TranslationsProfile$faq$0i2$It extends TranslationsProfile$faq$0i2$En {
 
 	// Translations
 	@override String get q => 'Come cambio la mia password di cifratura?';
-	@override String get a => '0. Assicurati che la sincronizzazione sia completata (vedi l\'avanzamento della sincronizzazione nella schermata home).\n1. Disconnettiti da Saber. \n2. Vai al sito Web del tuo server ed elimina la cartella "Saber". Questo eliminerà tutte le tue note dal server.\n3. Accedi nuovamente a Saber. Puoi scegliere una nuova password di cifratura quando accedi.\n4. Non dimenticare di disconnetterti e accedere nuovamente a Saber anche sugli altri tuoi dispositivi.';
+	@override String get a => '0. Assicurati che la sincronizzazione sia completata (vedi l\'avanzamento della sincronizzazione nella schermata home).\n1. Disconnettiti da DODO NOTES. \n2. Vai al sito Web del tuo server ed elimina la cartella "DODO NOTES". Questo eliminerà tutte le tue note dal server.\n3. Accedi nuovamente a DODO NOTES. Puoi scegliere una nuova password di cifratura quando accedi.\n4. Non dimenticare di disconnetterti e accedere nuovamente a DODO NOTES anche sugli altri tuoi dispositivi.';
 }
 
 // Path: profile.faq.3
@@ -633,7 +633,7 @@ class _TranslationsProfile$faq$0i3$It extends TranslationsProfile$faq$0i3$En {
 
 	// Translations
 	@override String get q => 'Come posso eliminare il mio account?';
-	@override String get a => 'Tocca il pulsante "${_root.profile.quickLinks.deleteAccount}" in alto e, se necessario, accedi.\nSe stai utilizzando il server Saber ufficiale, il tuo account verrà eliminato dopo un periodo di tolleranza di 1 settimana. Puoi contattarmi all\'indirizzo adilhanney@disroot.org durante questo periodo per annullare l\'eliminazione.\nSe stai utilizzando un server di terze parti, potrebbe non esserci un\'opzione per eliminare il tuo account: dovrai consultare la politica sulla privacy del server per ulteriori informazioni.';
+	@override String get a => 'Tocca il pulsante "${_root.profile.quickLinks.deleteAccount}" in alto e, se necessario, accedi.\nSe stai utilizzando il server DODO NOTES ufficiale, il tuo account verrà eliminato dopo un periodo di tolleranza di 1 settimana. Puoi contattarmi all\'indirizzo adilhanney@disroot.org durante questo periodo per annullare l\'eliminazione.\nSe stai utilizzando un server di terze parti, potrebbe non esserci un\'opzione per eliminare il tuo account: dovrai consultare la politica sulla privacy del server per ulteriori informazioni.';
 }
 
 // Path: editor.toolbar
@@ -786,7 +786,7 @@ class _TranslationsEditorVersionTooNewIt extends TranslationsEditorVersionTooNew
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Questa nota è stata modificata utilizzando una versione più recente di Saber';
+	@override String get title => 'Questa nota è stata modificata utilizzando una versione più recente di DODO NOTES';
 	@override String get subtitle => 'La modifica di questa nota potrebbe comportare la perdita di alcune informazioni. Vuoi ignorare e modificarla comunque?';
 	@override String get allowEditing => 'Consenti modifica';
 }
@@ -878,7 +878,7 @@ class _TranslationsLoginNcLoginStepLoginFlowIt extends TranslationsLoginNcLoginS
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
-	@override String get pleaseAuthorize => 'Autorizza Saber ad accedere al tuo account Nextcloud';
+	@override String get pleaseAuthorize => 'Autorizza DODO NOTES ad accedere al tuo account Nextcloud';
 	@override String get followPrompts => 'Seguire le istruzioni nell\'interfaccia Nextcloud';
 	@override String get browserDidntOpen => 'La pagina di accesso non si è aperta? Clicca qui';
 }
@@ -902,7 +902,7 @@ class _TranslationsLoginEncLoginStep$encFaq$0i1$It extends TranslationsLoginEncL
 
 	// Translations
 	@override String get q => 'Non ho ancora impostato una password di cifratura. Come posso ottenerla?';
-	@override String get a => 'Scegli una nuova password di cifratura e inseriscila sopra.\nSaber genererà automaticamente le chiavi di cifratura da questa password.';
+	@override String get a => 'Scegli una nuova password di cifratura e inseriscila sopra.\nDODO NOTES genererà automaticamente le chiavi di cifratura da questa password.';
 }
 
 // Path: login.encLoginStep.encFaq.2

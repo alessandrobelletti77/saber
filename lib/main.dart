@@ -331,7 +331,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return DynamicMaterialApp(title: 'Saber', router: App._router);
+    return DynamicMaterialApp(title: 'DODO NOTES', router: App._router);
   }
 
   @override

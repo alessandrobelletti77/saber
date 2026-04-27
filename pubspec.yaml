@@ -268,7 +268,7 @@ icons_launcher:
   platforms:
     android:
       enable: true
-      adaptive_background_color: "#ffc800"
+      adaptive_background_color: "#ffffff"
       adaptive_foreground_image: "assets/icon/icon_maskable.png"
       adaptive_monochrome_image: "assets/icon/icon_monochrome.png"
     ios:

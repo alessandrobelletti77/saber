@@ -25,7 +25,7 @@ class FileManager {
 
   static final log = Logger('FileManager');
 
-  static const appRootDirectoryPrefix = 'Saber';
+  static const appRootDirectoryPrefix = 'DODO_NOTES';
 
   /// This isn't final because isolates sometimes init multiple times.
   /// Realistically, this value never changes.
@@ -305,7 +305,7 @@ class FileManager {
           await SaverGallery.saveImage(
             Uint8List.fromList(bytes),
             fileName: fileName,
-            androidRelativePath: 'Pictures/Saber',
+            androidRelativePath: 'Pictures/DODO_NOTES',
             skipIfExists: true,
           );
         }
