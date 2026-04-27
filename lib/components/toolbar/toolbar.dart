@@ -44,6 +44,8 @@ class Toolbar extends StatefulWidget {
     required this.redo,
     required this.isRedoPossible,
     required this.toggleFingerDrawing,
+    required this.toggleFingerTouchDisabled,
+    required this.toggleOrthoDrawing,
     required this.pickPhoto,
     required this.paste,
     required this.duplicateSelection,
@@ -69,6 +71,8 @@ class Toolbar extends StatefulWidget {
   final bool isRedoPossible;
 
   final VoidCallback toggleFingerDrawing;
+  final VoidCallback toggleFingerTouchDisabled;
+  final VoidCallback toggleOrthoDrawing;
 
   final VoidCallback pickPhoto;
 
@@ -328,6 +332,14 @@ class _ToolbarState extends State<Toolbar> {
             runSpacing: 8,
             children: [
               ToolbarIconButton(
+                tooltip: t.editor.toolbar.toggleEraser,
+                selected: widget.currentTool is Eraser,
+                enabled: !widget.readOnly,
+                onPressed: toggleEraser,
+                padding: buttonPadding,
+                child: const FaIcon(FontAwesomeIcons.eraser, size: 16),
+              ),
+              ToolbarIconButton(
                 tooltip: Pen.currentPen.name,
                 selected: widget.currentTool == Pen.currentPen,
                 enabled: !widget.readOnly,
@@ -449,14 +461,6 @@ class _ToolbarState extends State<Toolbar> {
                 child: const Icon(Symbols.stylus_laser_pointer),
               ),
               ToolbarIconButton(
-                tooltip: t.editor.toolbar.toggleEraser,
-                selected: widget.currentTool is Eraser,
-                enabled: !widget.readOnly,
-                onPressed: toggleEraser,
-                padding: buttonPadding,
-                child: const FaIcon(FontAwesomeIcons.eraser, size: 16),
-              ),
-              ToolbarIconButton(
                 tooltip: t.editor.toolbar.photo,
                 enabled: !widget.readOnly,
                 onPressed: widget.pickPhoto,
@@ -491,6 +495,32 @@ class _ToolbarState extends State<Toolbar> {
                     );
                   },
                 ),
+              ValueListenableBuilder(
+                valueListenable: stows.editorFingerTouchDisabled,
+                builder: (context, value, child) {
+                  return ToolbarIconButton(
+                    tooltip: t.editor.toolbar.toggleFingerTouchDisabled,
+                    selected: value,
+                    enabled: !widget.readOnly,
+                    onPressed: widget.toggleFingerTouchDisabled,
+                    padding: buttonPadding,
+                    child: const Icon(Symbols.do_not_touch),
+                  );
+                },
+              ),
+              ValueListenableBuilder(
+                valueListenable: stows.editorOrthoDrawing,
+                builder: (context, value, child) {
+                  return ToolbarIconButton(
+                    tooltip: t.editor.toolbar.toggleOrthoDrawing,
+                    selected: value,
+                    enabled: !widget.readOnly,
+                    onPressed: widget.toggleOrthoDrawing,
+                    padding: buttonPadding,
+                    child: const Icon(Symbols.square_foot),
+                  );
+                },
+              ),
               ToolbarIconButton(
                 tooltip: t.editor.toolbar.fullscreen,
                 selected: DynamicMaterialApp.isFullscreen,

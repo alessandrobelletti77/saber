@@ -30,7 +30,17 @@ enum CanvasBackgroundPattern {
   tablature('tablature'),
 
   /// Cornell notes
-  cornell('cornell');
+  cornell('cornell'),
+
+  /// Engineering "graph paper": a 3-tier grid in light gray.
+  /// Thin lines every 1 unit (treated as 1mm), medium every 5 units (5mm),
+  /// bold every 10 units (10mm). Spacing scales with `lineHeight` where
+  /// `lineHeight` represents 5mm.
+  mmGraph('mm-graph', requiresClipping: true),
+
+  /// 5x5mm light gray grid.
+  /// Lines every `lineHeight` units (treated as 5mm).
+  grid5mm('grid-5mm', requiresClipping: true);
 
   const CanvasBackgroundPattern(this.name, {this.requiresClipping = false});
 

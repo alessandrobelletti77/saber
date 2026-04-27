@@ -1031,6 +1031,12 @@ class TranslationsEditorToolbarEn {
 	/// en: 'Toggle finger drawing (Ctrl F)'
 	String get toggleFingerDrawing => 'Toggle finger drawing (Ctrl F)';
 
+	/// en: 'Disable finger touch entirely (stylus only)'
+	String get toggleFingerTouchDisabled => 'Disable finger touch entirely (stylus only)';
+
+	/// en: 'Orthogonal drawing (snap to 0°/45°/90°)'
+	String get toggleOrthoDrawing => 'Orthogonal drawing (snap to 0°/45°/90°)';
+
 	/// en: 'Undo'
 	String get undo => 'Undo';
 
@@ -1544,4 +1550,10 @@ class TranslationsEditorMenuBgPatternsEn {
 
 	/// en: 'Cornell'
 	String get cornell => 'Cornell';
+
+	/// en: 'Engineering (mm graph)'
+	String get mmGraph => 'Engineering (mm graph)';
+
+	/// en: '5×5 mm grid'
+	String get grid5mm => '5×5 mm grid';
 }

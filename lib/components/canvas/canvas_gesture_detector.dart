@@ -308,10 +308,13 @@ class CanvasGestureDetectorState extends State<CanvasGestureDetector> {
     _arrowKeyPanTimers.forEach((_, timer) => timer.cancel());
   }
 
+  void _onFingerTouchDisabledChanged() => setState(() {});
+
   @override
   void initState() {
     setInitialTransform();
     widget._transformationController.addListener(onTransformChanged);
+    stows.editorFingerTouchDisabled.addListener(_onFingerTouchDisabledChanged);
     _assignKeybindings();
     super.initState();
   }
@@ -486,7 +489,10 @@ class CanvasGestureDetectorState extends State<CanvasGestureDetector> {
                 return InteractiveCanvasViewer.builder(
                   minScale: zoomLockedValue ?? CanvasGestureDetector.kMinScale,
                   maxScale: zoomLockedValue ?? CanvasGestureDetector.kMaxScale,
-                  panEnabled: !singleFingerPanLock,
+                  panEnabled:
+                      !singleFingerPanLock &&
+                      !stows.editorFingerTouchDisabled.value,
+                  scaleEnabled: !stows.editorFingerTouchDisabled.value,
                   panAxis: axisAlignedPanLock ? PanAxis.aligned : PanAxis.free,
 
                   interactionEndFrictionCoefficient:
@@ -556,6 +562,9 @@ class CanvasGestureDetectorState extends State<CanvasGestureDetector> {
     );
     widget._transformationController.removeListener(onTransformChanged);
     widget._transformationController.dispose();
+    stows.editorFingerTouchDisabled.removeListener(
+      _onFingerTouchDisabledChanged,
+    );
     _removeKeybindings();
     super.dispose();
   }

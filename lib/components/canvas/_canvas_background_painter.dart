@@ -37,7 +37,12 @@ class CanvasBackgroundPainter extends CustomPainter {
     paint.color = backgroundColor.withInversion(invert);
     canvas.drawRect(canvasRect, paint);
 
-    paint.strokeWidth = lineThickness.toDouble();
+    // Engineering paper patterns (mmGraph/grid5mm) use thinner lines so the
+    // light gray grid stays subtle and doesn't compete visually with notes.
+    final isThinPattern =
+        backgroundPattern == CanvasBackgroundPattern.mmGraph ||
+        backgroundPattern == CanvasBackgroundPattern.grid5mm;
+    paint.strokeWidth = lineThickness.toDouble() * (isThinPattern ? 0.5 : 1.0);
 
     if (backgroundPattern.requiresClipping) {
       canvas.save();
@@ -49,7 +54,11 @@ class CanvasBackgroundPainter extends CustomPainter {
       size: size,
       lineHeight: lineHeight,
     )) {
-      if (element.secondaryColor) {
+      if (element.useGreyColor) {
+        paint.color = Colors.grey.withValues(
+          alpha: (preview ? 1.5 : 1.0) * element.greyOpacity,
+        );
+      } else if (element.secondaryColor) {
         paint.color = secondaryColor.withValues(alpha: preview ? 0.5 : 0.2);
       } else {
         paint.color = primaryColor.withValues(alpha: preview ? 0.5 : 0.2);
@@ -166,6 +175,57 @@ class CanvasBackgroundPainter extends CustomPainter {
             isLine: true,
           );
         }
+      case .mmGraph:
+        // mmGraph: lineHeight represents 5mm. Subdivide into 5 (1mm each).
+        // Three weights: every 1mm (lightest), every 5mm (medium), every 10mm (darkest).
+        final mm = lineHeight / 5;
+        if (mm <= 0) return;
+        for (double y = 0; y <= size.height; y += mm) {
+          final mmIndex = (y / mm).round();
+          final isMajor = mmIndex % 10 == 0;
+          final isMid = mmIndex % 5 == 0;
+          final opacity = isMajor ? 0.22 : (isMid ? 0.14 : 0.06);
+          yield PatternElement(
+            Offset(0, y),
+            Offset(size.width, y),
+            isLine: true,
+            useGreyColor: true,
+            greyOpacity: opacity,
+          );
+        }
+        for (double x = 0; x <= size.width; x += mm) {
+          final mmIndex = (x / mm).round();
+          final isMajor = mmIndex % 10 == 0;
+          final isMid = mmIndex % 5 == 0;
+          final opacity = isMajor ? 0.22 : (isMid ? 0.14 : 0.06);
+          yield PatternElement(
+            Offset(x, 0),
+            Offset(x, size.height),
+            isLine: true,
+            useGreyColor: true,
+            greyOpacity: opacity,
+          );
+        }
+      case .grid5mm:
+        // grid5mm: simple light gray grid every `lineHeight` units (5mm).
+        for (double y = 0; y <= size.height; y += lineHeight) {
+          yield PatternElement(
+            Offset(0, y),
+            Offset(size.width, y),
+            isLine: true,
+            useGreyColor: true,
+            greyOpacity: 0.13,
+          );
+        }
+        for (double x = 0; x <= size.width; x += lineHeight) {
+          yield PatternElement(
+            Offset(x, 0),
+            Offset(x, size.height),
+            isLine: true,
+            useGreyColor: true,
+            greyOpacity: 0.13,
+          );
+        }
       case .cornell:
         // half-width line for name field
         yield PatternElement(
@@ -209,10 +269,19 @@ class PatternElement {
   /// Whether this should use a secondary color
   final bool secondaryColor;
 
+  /// If true, paint this element with a light gray color (used by
+  /// engineering paper patterns like mmGraph/grid5mm).
+  final bool useGreyColor;
+
+  /// Opacity of the gray color (only meaningful when [useGreyColor] is true).
+  final double greyOpacity;
+
   PatternElement(
     this.start,
     this.end, {
     this.isLine = true,
     this.secondaryColor = false,
+    this.useGreyColor = false,
+    this.greyOpacity = 0.3,
   });
 }

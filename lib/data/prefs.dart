@@ -140,6 +140,16 @@ class Stows {
     true,
     volatile: !_isOnMainIsolate,
   );
+  final editorOrthoDrawing = PlainStow(
+    'editorOrthoDrawing',
+    false,
+    volatile: !_isOnMainIsolate,
+  );
+  final editorFingerTouchDisabled = PlainStow(
+    'editorFingerTouchDisabled',
+    false,
+    volatile: !_isOnMainIsolate,
+  );
   final editorAutoInvert = PlainStow(
     'editorAutoInvert',
     true,

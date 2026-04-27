@@ -649,6 +649,8 @@ class _TranslationsEditorToolbarIt extends TranslationsEditorToolbarEn {
 	@override String get photo => 'Immagini';
 	@override String get text => 'Testo';
 	@override String get toggleFingerDrawing => 'Attiva/disattiva il disegno con il dito (Ctrl F)';
+	@override String get toggleFingerTouchDisabled => 'Disabilita completamente il tocco delle dita (solo stilo)';
+	@override String get toggleOrthoDrawing => 'Disegno ortogonale (snap a 0°/45°/90°)';
 	@override String get undo => 'Annulla';
 	@override String get redo => 'Rifai';
 	@override String get export => 'Esporta (Ctrl Shift S)';
@@ -944,4 +946,6 @@ class _TranslationsEditorMenuBgPatternsIt extends TranslationsEditorMenuBgPatter
 	@override String get staffs => 'Pentagrammi';
 	@override String get tablature => 'Tablatura';
 	@override String get cornell => 'Metodo Cornell';
+	@override String get mmGraph => 'Carta millimetrata';
+	@override String get grid5mm => 'Quadrettatura 5×5 mm';
 }

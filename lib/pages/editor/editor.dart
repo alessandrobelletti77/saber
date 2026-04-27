@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:collapsible/collapsible.dart';
 import 'package:file_picker/file_picker.dart';
@@ -552,10 +553,20 @@ class EditorState extends State<Editor> {
 
     if (currentTool == Tool.textEditing) {
       return false;
-    } else if (stows.editorFingerDrawing.value ||
+    }
+
+    final isStylus =
         currentPointerKind == PointerDeviceKind.stylus ||
         currentPointerKind == PointerDeviceKind.invertedStylus ||
-        currentPressure != null) {
+        currentPressure != null;
+
+    // When "disable touch" is on, only stylus can start a stroke.
+    if (stows.editorFingerTouchDisabled.value && !isStylus) {
+      log.fine('Touch disabled: rejected non-stylus stroke');
+      return false;
+    }
+
+    if (stows.editorFingerDrawing.value || isStylus) {
       return true;
     } else {
       log.fine('Non-stylus found, rejected stroke');
@@ -608,12 +619,39 @@ class EditorState extends State<Editor> {
     setState(() {});
   }
 
+  /// Snaps `current` to the nearest axis-aligned direction from `start`,
+  /// in 15-degree increments. Used by the orthogonal drawing toggle to
+  /// constrain pen strokes along straight lines at common technical angles
+  /// (0°, 15°, 30°, 45°, 60°, 75°, 90°, ...).
+  static Offset _snapToOrthoAxis(Offset start, Offset current) {
+    final dx = current.dx - start.dx;
+    final dy = current.dy - start.dy;
+    if (dx == 0 && dy == 0) return current;
+    final length = math.sqrt(dx * dx + dy * dy);
+    final angle = math.atan2(dy, dx);
+    const step = math.pi / 12; // 15 degrees
+    final snappedAngle = (angle / step).round() * step;
+    return Offset(
+      start.dx + length * math.cos(snappedAngle),
+      start.dy + length * math.sin(snappedAngle),
+    );
+  }
+
   void onDrawUpdate(ScaleUpdateDetails details) {
     final page = coreInfo.pages[dragPageIndex!];
-    final position = page.renderBox!.globalToLocal(details.focalPoint);
+    var position = page.renderBox!.globalToLocal(details.focalPoint);
     final offset = position - previousPosition;
 
     if (currentTool is Pen) {
+      if (stows.editorOrthoDrawing.value) {
+        final firstPoint = Pen.currentStroke?.points.firstOrNull;
+        if (firstPoint != null) {
+          position = _snapToOrthoAxis(
+            Offset(firstPoint.dx, firstPoint.dy),
+            position,
+          );
+        }
+      }
       (currentTool as Pen).onDragUpdate(position, currentPressure);
       page.redrawStrokes();
     } else if (currentTool is Eraser) {
@@ -656,11 +694,8 @@ class EditorState extends State<Editor> {
         if (newStroke == null) return;
         if (newStroke.isEmpty) return;
 
-        if (stows.autoStraightenLines.value &&
-            currentTool is! ShapePen &&
-            newStroke.isStraightLine()) {
-          newStroke.convertToLine();
-        }
+        // Free-hand strokes stay free-hand. Use the explicit ortho-drawing
+        // toggle on the toolbar to snap to straight lines.
 
         createPage(newStroke.pageIndex);
         page.insertStroke(newStroke);
@@ -1589,7 +1624,24 @@ class EditorState extends State<Editor> {
           isRedoPossible: history.canRedo,
           toggleFingerDrawing: () {
             stows.editorFingerDrawing.value = !stows.editorFingerDrawing.value;
+            // Drawing with finger and "disable touch" are mutually exclusive.
+            if (stows.editorFingerDrawing.value) {
+              stows.editorFingerTouchDisabled.value = false;
+            }
             lastSeenPointerCount = 0;
+          },
+          toggleFingerTouchDisabled: () {
+            stows.editorFingerTouchDisabled.value =
+                !stows.editorFingerTouchDisabled.value;
+            // Disable touch implies finger doesn't draw either.
+            if (stows.editorFingerTouchDisabled.value) {
+              stows.editorFingerDrawing.value = false;
+            }
+            lastSeenPointerCount = 0;
+          },
+          toggleOrthoDrawing: () {
+            stows.editorOrthoDrawing.value =
+                !stows.editorOrthoDrawing.value;
           },
           pickPhoto: _pickPhotos,
           paste: paste,

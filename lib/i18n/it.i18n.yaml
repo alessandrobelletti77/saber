@@ -266,6 +266,8 @@ editor:
     photo: Immagini
     text: Testo
     toggleFingerDrawing: Attiva/disattiva il disegno con il dito (Ctrl F)
+    toggleFingerTouchDisabled: Disabilita completamente il tocco delle dita (solo stilo)
+    toggleOrthoDrawing: Disegno ortogonale (snap a 0°/45°/90°)
     undo: Annulla
     redo: Rifai
     export: Esporta (Ctrl Shift S)
@@ -346,6 +348,8 @@ editor:
       staffs: Pentagrammi
       tablature: Tablatura
       cornell: Metodo Cornell
+      mmGraph: Carta millimetrata
+      grid5mm: Quadrettatura 5×5 mm
   readOnlyBanner:
     title: Modalità di sola lettura
     watchingServer: Al momento stai monitorando gli aggiornamenti sul server. La modifica è disabilitata in questa modalità.
