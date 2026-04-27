@@ -692,12 +692,25 @@ class EditorState extends State<Editor> {
     bool shouldSave = true;
     setState(() {
       if (currentTool is Pen) {
-        final newStroke = (currentTool as Pen).onDragEnd();
+        var newStroke = (currentTool as Pen).onDragEnd();
         if (newStroke == null) return;
         if (newStroke.isEmpty) return;
 
         // Free-hand strokes stay free-hand. Use the explicit ortho-drawing
         // toggle on the toolbar to snap to straight lines.
+
+        // Global "shape mode" toggle — try to recognise the stroke and
+        // replace it with a clean line/rectangle/circle/triangle/star.
+        // Only runs for plain pens (ShapePen has its own debounced flow).
+        if (stows.editorShapeMode.value && currentTool is! ShapePen) {
+          final pen = currentTool as Pen;
+          newStroke = ShapePen.recognize(
+            newStroke,
+            color: pen.color,
+            pressureEnabled: pen.pressureEnabled,
+            toolId: pen.toolId,
+          );
+        }
 
         createPage(newStroke.pageIndex);
         page.insertStroke(newStroke);
@@ -1481,6 +1494,13 @@ class EditorState extends State<Editor> {
                 } else {
                   // store previous tool to restore it later
                   tmpTool = currentTool;
+                  // The stylus-button flag is OR-accumulated and never
+                  // reset on its own. If a stale `true` survived from an
+                  // earlier session it would force the eraser to switch
+                  // back after the very first stroke even with the user's
+                  // "keep eraser active" preference set. Reset it here so
+                  // the preference is the sole authority.
+                  stylusButtonPressed = false;
                 }
               }
 
@@ -1649,6 +1669,9 @@ class EditorState extends State<Editor> {
           toggleOrthoDrawing: () {
             stows.editorOrthoDrawing.value =
                 !stows.editorOrthoDrawing.value;
+          },
+          toggleShapeMode: () {
+            stows.editorShapeMode.value = !stows.editorShapeMode.value;
           },
           togglePropertiesPanel: () {
             stows.editorPropertiesPanelOpen.value =

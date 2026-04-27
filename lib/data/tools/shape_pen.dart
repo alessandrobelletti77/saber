@@ -10,6 +10,7 @@ import 'package:saber/components/canvas/_stroke.dart';
 import 'package:saber/data/prefs.dart';
 import 'package:saber/data/tools/pen.dart';
 import 'package:saber/i18n/strings.g.dart';
+import 'package:sbn/tool_id.dart';
 
 class ShapePen extends Pen {
   ShapePen()
@@ -32,6 +33,58 @@ class ShapePen extends Pen {
   static RecognizedUnistroke? detectedShape;
   void _detectShape() {
     detectedShape = Pen.currentStroke?.detectShape();
+  }
+
+  /// Runs the unistroke recogniser on [rawStroke] and, if a known regular
+  /// shape is detected (line, rectangle, circle), returns a Stroke
+  /// containing that shape rendered cleanly with the caller's pen colour
+  /// and options. Returns [rawStroke] unchanged otherwise.
+  ///
+  /// Triangle/star/polyline detection has been intentionally dropped: the
+  /// classifier was too unreliable for triangles, and zigzag polylines
+  /// kept being mis-rounded into splines.
+  ///
+  /// Used by the global "shape mode" toggle so any pen can produce shapes
+  /// without switching to the dedicated [ShapePen].
+  static Stroke recognize(
+    Stroke rawStroke, {
+    required Color color,
+    required bool pressureEnabled,
+    required ToolId toolId,
+  }) {
+    final detected = rawStroke.detectShape();
+    if (detected == null || detected.name == null) return rawStroke;
+    switch (detected.name!) {
+      case DefaultUnistrokeNames.line:
+        return rawStroke..convertToLine();
+      case DefaultUnistrokeNames.rectangle:
+        final rect = detected.convertToRect();
+        return RectangleStroke(
+          color: color,
+          pressureEnabled: pressureEnabled,
+          options: rawStroke.options,
+          pageIndex: rawStroke.pageIndex,
+          page: rawStroke.page,
+          toolId: toolId,
+          rect: rect,
+        );
+      case DefaultUnistrokeNames.circle:
+        final (center, radius) = detected.convertToCircle();
+        return CircleStroke(
+          color: color,
+          pressureEnabled: pressureEnabled,
+          options: rawStroke.options,
+          pageIndex: rawStroke.pageIndex,
+          page: rawStroke.page,
+          toolId: toolId,
+          radius: radius,
+          center: center,
+        );
+      case DefaultUnistrokeNames.triangle:
+      case DefaultUnistrokeNames.star:
+        // Intentionally not handled (unreliable / not desired).
+        return rawStroke;
+    }
   }
 
   static Timer? _detectShapeDebouncer;
@@ -106,16 +159,9 @@ class ShapePen extends Pen {
         );
       case DefaultUnistrokeNames.triangle:
       case DefaultUnistrokeNames.star:
-        final polygon = detectedShape.convertToCanonicalPolygon();
-        log.info('Detected ${detectedShape.name}');
-        return Stroke(
-          color: color,
-          pressureEnabled: pressureEnabled,
-          options: rawStroke.options,
-          pageIndex: rawStroke.pageIndex,
-          page: rawStroke.page,
-          toolId: toolId,
-        )..addPoints(polygon);
+        // Triangle/star recognition disabled — too unreliable. Return the
+        // raw freehand stroke instead.
+        return rawStroke;
     }
   }
 }

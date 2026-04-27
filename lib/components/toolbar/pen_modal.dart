@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:saber/components/toolbar/size_picker.dart';
 import 'package:saber/data/extensions/axis_extensions.dart';
 import 'package:saber/data/prefs.dart';
 import 'package:saber/data/tools/_tool.dart';
-import 'package:saber/data/tools/highlighter.dart';
 import 'package:saber/data/tools/pen.dart';
 import 'package:saber/data/tools/pencil.dart';
-import 'package:saber/data/tools/shape_pen.dart';
 import 'package:saber/i18n/strings.g.dart';
 
 class PenModal extends StatefulWidget {
@@ -38,83 +34,67 @@ class _PenModalState extends State<PenModal> {
       mainAxisAlignment: .center,
       children: [
         SizePicker(axis: axis, pen: currentPen),
-        if (currentPen is! Highlighter && currentPen is! Pencil) ...[
-          const SizedBox.square(dimension: 8),
-          IconButton(
-            onPressed: () => setState(() {
-              widget.setTool(Pen.fountainPen());
-            }),
-            style: TextButton.styleFrom(
-              foregroundColor: Pen.currentPen.icon == Pen.fountainPenIcon
-                  ? ColorScheme.of(context).secondary
-                  : ColorScheme.of(context).onSurface,
-              backgroundColor: Pen.currentPen.icon == Pen.fountainPenIcon
-                  ? Theme.of(
-                      context,
-                    ).colorScheme.secondary.withValues(alpha: 0.1)
-                  : Colors.transparent,
-              shape: const CircleBorder(),
-            ),
-            tooltip: t.editor.pens.fountainPen,
-            icon: SvgPicture.asset(
-              'assets/images/scribble_fountain.svg',
-              width: 32,
-              height: 32 / 508 * 374,
-              theme: SvgTheme(
-                currentColor: Pen.currentPen.icon == Pen.fountainPenIcon
-                    ? ColorScheme.of(context).secondary
-                    : ColorScheme.of(context).onSurface,
-              ),
-            ),
-          ),
-          const SizedBox.square(dimension: 8),
-          IconButton(
-            onPressed: () => setState(() {
-              widget.setTool(Pen.ballpointPen());
-            }),
-            style: TextButton.styleFrom(
-              foregroundColor: Pen.currentPen.icon == Pen.ballpointPenIcon
-                  ? ColorScheme.of(context).secondary
-                  : ColorScheme.of(context).onSurface,
-              backgroundColor: Pen.currentPen.icon == Pen.ballpointPenIcon
-                  ? Theme.of(
-                      context,
-                    ).colorScheme.secondary.withValues(alpha: 0.1)
-                  : Colors.transparent,
-              shape: const CircleBorder(),
-            ),
-            tooltip: t.editor.pens.ballpointPen,
-            icon: SvgPicture.asset(
-              'assets/images/scribble_ballpoint.svg',
-              width: 32,
-              height: 32 / 508 * 374,
-              theme: SvgTheme(
-                currentColor: Pen.currentPen.icon == Pen.ballpointPenIcon
-                    ? ColorScheme.of(context).secondary
-                    : ColorScheme.of(context).onSurface,
-              ),
-            ),
-          ),
-          const SizedBox.square(dimension: 8),
-          IconButton(
-            onPressed: () => setState(() {
-              widget.setTool(ShapePen());
-            }),
-            style: TextButton.styleFrom(
-              foregroundColor: Pen.currentPen.icon == ShapePen.shapePenIcon
-                  ? ColorScheme.of(context).secondary
-                  : ColorScheme.of(context).onSurface,
-              backgroundColor: Pen.currentPen.icon == ShapePen.shapePenIcon
-                  ? Theme.of(
-                      context,
-                    ).colorScheme.secondary.withValues(alpha: 0.1)
-                  : Colors.transparent,
-              shape: const CircleBorder(),
-            ),
-            tooltip: t.editor.pens.shapePen,
-            icon: const FaIcon(ShapePen.shapePenIcon),
-          ),
+        if (currentPen is Pencil) ...[
+          const SizedBox.square(dimension: 16),
+          _HardnessPicker(pencil: currentPen, axis: axis),
         ],
+      ],
+    );
+  }
+}
+
+/// Companion to [SizePicker] that lets the user dial the pencil's hardness
+/// from 5H (hardest, lightest stroke) to 5B (softest, darkest stroke).
+/// Shown alongside the size slider whenever a [Pencil] is active.
+class _HardnessPicker extends StatefulWidget {
+  const _HardnessPicker({required this.pencil, required this.axis});
+
+  final Pencil pencil;
+  final Axis axis;
+
+  @override
+  State<_HardnessPicker> createState() => _HardnessPickerState();
+}
+
+class _HardnessPickerState extends State<_HardnessPicker> {
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = ColorScheme.of(context);
+    return Flex(
+      direction: widget.axis,
+      mainAxisSize: .min,
+      children: [
+        Column(
+          children: [
+            Text(
+              t.editor.penOptions.hardness,
+              style: TextStyle(
+                color: colorScheme.onSurface.withValues(alpha: 0.8),
+                fontSize: 10,
+                height: 1,
+              ),
+            ),
+            Text(Pencil.hardnessLabel(widget.pencil.hardness)),
+          ],
+        ),
+        const SizedBox(width: 8),
+        SizedBox(
+          width: widget.axis == Axis.horizontal ? 120 : 32,
+          height: widget.axis == Axis.vertical ? 120 : 32,
+          child: RotatedBox(
+            quarterTurns: widget.axis == Axis.horizontal ? 0 : 1,
+            child: Slider(
+              value: widget.pencil.hardness.toDouble(),
+              min: 0,
+              max: 10,
+              divisions: 10,
+              label: Pencil.hardnessLabel(widget.pencil.hardness),
+              onChanged: (v) => setState(() {
+                widget.pencil.setHardness(v.toInt());
+              }),
+            ),
+          ),
+        ),
       ],
     );
   }

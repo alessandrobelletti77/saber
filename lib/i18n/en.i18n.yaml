@@ -268,6 +268,8 @@ editor:
     toggleFingerDrawing: Toggle finger drawing (Ctrl F)
     toggleFingerTouchDisabled: Disable finger touch entirely (stylus only)
     toggleOrthoDrawing: Orthogonal drawing (snap to 0°/45°/90°)
+    toggleShapeMode: Shape recognition (line/rectangle/circle/triangle)
+    toggleEraserKeepActive: Keep eraser always active (no auto-disable)
     togglePropertiesPanel: Show/hide properties panel
     undo: Undo
     redo: Redo
@@ -277,12 +279,18 @@ editor:
   pens:
     fountainPen: Fountain pen
     ballpointPen: Ballpoint pen
+    brush: Brush
+    roundTipMarker: Marker (round tip)
+    squareTipMarker: Marker (square tip)
     highlighter: Highlighter
     pencil: Pencil
     shapePen: Shape pen
     laserPointer: Laser pointer
   penOptions:
     size: Size
+    hardness: Hardness
+  eraserOptions:
+    keepActive: Keep eraser always active
   colors:
     colorPicker: Color picker
     customBrightnessHue: Custom $b $h

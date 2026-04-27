@@ -155,6 +155,21 @@ class Stows {
     false,
     volatile: !_isOnMainIsolate,
   );
+  /// Pencil hardness: 0 = 5H (hardest, lightest stroke), 5 = HB (default),
+  /// 10 = 5B (softest, darkest stroke).
+  final lastPencilHardness = PlainStow(
+    'lastPencilHardness',
+    5,
+    volatile: !_isOnMainIsolate,
+  );
+  /// When true, finished strokes are run through the unistroke shape
+  /// recogniser and replaced with a clean line/rectangle/circle/triangle if
+  /// detected. Works with any pen, not only [ShapePen].
+  final editorShapeMode = PlainStow(
+    'editorShapeMode',
+    false,
+    volatile: !_isOnMainIsolate,
+  );
   final editorAutoInvert = PlainStow(
     'editorAutoInvert',
     true,

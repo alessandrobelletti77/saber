@@ -301,6 +301,7 @@ class TranslationsEditorEn {
 	late final TranslationsEditorToolbarEn toolbar = TranslationsEditorToolbarEn.internal(_root);
 	late final TranslationsEditorPensEn pens = TranslationsEditorPensEn.internal(_root);
 	late final TranslationsEditorPenOptionsEn penOptions = TranslationsEditorPenOptionsEn.internal(_root);
+	late final TranslationsEditorEraserOptionsEn eraserOptions = TranslationsEditorEraserOptionsEn.internal(_root);
 	late final TranslationsEditorColorsEn colors = TranslationsEditorColorsEn.internal(_root);
 	late final TranslationsEditorImageOptionsEn imageOptions = TranslationsEditorImageOptionsEn.internal(_root);
 	late final TranslationsEditorSelectionBarEn selectionBar = TranslationsEditorSelectionBarEn.internal(_root);
@@ -1038,6 +1039,12 @@ class TranslationsEditorToolbarEn {
 	/// en: 'Orthogonal drawing (snap to 0°/45°/90°)'
 	String get toggleOrthoDrawing => 'Orthogonal drawing (snap to 0°/45°/90°)';
 
+	/// en: 'Shape recognition (line/rectangle/circle/triangle)'
+	String get toggleShapeMode => 'Shape recognition (line/rectangle/circle/triangle)';
+
+	/// en: 'Keep eraser always active (no auto-disable)'
+	String get toggleEraserKeepActive => 'Keep eraser always active (no auto-disable)';
+
 	/// en: 'Show/hide properties panel'
 	String get togglePropertiesPanel => 'Show/hide properties panel';
 
@@ -1071,6 +1078,15 @@ class TranslationsEditorPensEn {
 	/// en: 'Ballpoint pen'
 	String get ballpointPen => 'Ballpoint pen';
 
+	/// en: 'Brush'
+	String get brush => 'Brush';
+
+	/// en: 'Marker (round tip)'
+	String get roundTipMarker => 'Marker (round tip)';
+
+	/// en: 'Marker (square tip)'
+	String get squareTipMarker => 'Marker (square tip)';
+
 	/// en: 'Highlighter'
 	String get highlighter => 'Highlighter';
 
@@ -1094,6 +1110,21 @@ class TranslationsEditorPenOptionsEn {
 
 	/// en: 'Size'
 	String get size => 'Size';
+
+	/// en: 'Hardness'
+	String get hardness => 'Hardness';
+}
+
+// Path: editor.eraserOptions
+class TranslationsEditorEraserOptionsEn {
+	TranslationsEditorEraserOptionsEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Keep eraser always active'
+	String get keepActive => 'Keep eraser always active';
 }
 
 // Path: editor.colors

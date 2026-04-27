@@ -12,6 +12,7 @@ import 'package:saber/components/theming/adaptive_icon.dart';
 import 'package:saber/components/theming/dynamic_material_app.dart';
 import 'package:saber/components/theming/uni_icon.dart';
 import 'package:saber/components/toolbar/color_bar.dart';
+import 'package:saber/components/toolbar/eraser_modal.dart';
 import 'package:saber/components/toolbar/export_bar.dart';
 import 'package:saber/components/toolbar/pen_modal.dart';
 import 'package:saber/components/toolbar/selection_bar.dart';
@@ -27,6 +28,7 @@ import 'package:saber/data/tools/laser_pointer.dart';
 import 'package:saber/data/tools/pen.dart';
 import 'package:saber/data/tools/pencil.dart';
 import 'package:saber/data/tools/select.dart';
+import 'package:saber/data/tools/shape_pen.dart';
 import 'package:saber/i18n/strings.g.dart';
 
 class Toolbar extends StatefulWidget {
@@ -46,6 +48,7 @@ class Toolbar extends StatefulWidget {
     required this.toggleFingerDrawing,
     required this.toggleFingerTouchDisabled,
     required this.toggleOrthoDrawing,
+    required this.toggleShapeMode,
     required this.togglePropertiesPanel,
     required this.pickPhoto,
     required this.paste,
@@ -87,6 +90,7 @@ class Toolbar extends StatefulWidget {
   final VoidCallback toggleFingerDrawing;
   final VoidCallback toggleFingerTouchDisabled;
   final VoidCallback toggleOrthoDrawing;
+  final VoidCallback toggleShapeMode;
   final VoidCallback togglePropertiesPanel;
 
   final VoidCallback pickPhoto;
@@ -266,6 +270,7 @@ class _ToolbarState extends State<Toolbar> {
                 duplicateSelection: widget.duplicateSelection,
                 deleteSelection: widget.deleteSelection,
               ),
+              .eraser => const EraserModal(),
             },
           );
         },
@@ -351,28 +356,44 @@ class _ToolbarState extends State<Toolbar> {
                 tooltip: t.editor.toolbar.toggleEraser,
                 selected: widget.currentTool is Eraser,
                 enabled: !widget.readOnly,
-                onPressed: toggleEraser,
-                padding: buttonPadding,
-                child: const FaIcon(FontAwesomeIcons.eraser, size: 16),
-              ),
-              ToolbarIconButton(
-                tooltip: Pen.currentPen.name,
-                selected: widget.currentTool == Pen.currentPen,
-                enabled: !widget.readOnly,
                 onPressed: () {
-                  if (widget.currentTool == Pen.currentPen) {
-                    if (toolOptionsType.value == .pen) {
-                      toolOptionsType.value = .hide;
-                    } else {
-                      toolOptionsType.value = .pen;
-                    }
+                  // Tapping the eraser when it is ALREADY active toggles its
+                  // options modal (the "keep active" switch). Otherwise just
+                  // switches the active tool to the eraser.
+                  if (widget.currentTool is Eraser) {
+                    toolOptionsType.value =
+                        toolOptionsType.value == .eraser ? .hide : .eraser;
                   } else {
                     toolOptionsType.value = .hide;
-                    widget.setTool(Pen.currentPen);
+                    toggleEraser();
                   }
                 },
                 padding: buttonPadding,
-                child: UniIcon(Pen.currentPen.icon, size: 16),
+                child: const FaIcon(FontAwesomeIcons.eraser, size: 16),
+              ),
+              // Two marker buttons: round-tip and square-tip. Each:
+              // - first press: select that variant
+              // - second press (when already active): open size modal
+              ToolbarIconButton(
+                tooltip: t.editor.pens.roundTipMarker,
+                selected: widget.currentTool is Pen &&
+                    (widget.currentTool as Pen).icon ==
+                        Pen.roundTipMarkerIcon,
+                enabled: !widget.readOnly,
+                onPressed: () {
+                  final isActive = widget.currentTool is Pen &&
+                      (widget.currentTool as Pen).icon ==
+                          Pen.roundTipMarkerIcon;
+                  if (isActive) {
+                    toolOptionsType.value =
+                        toolOptionsType.value == .pen ? .hide : .pen;
+                  } else {
+                    toolOptionsType.value = .hide;
+                    widget.setTool(Pen.roundTipMarker());
+                  }
+                },
+                padding: buttonPadding,
+                child: const FaIcon(Pen.roundTipMarkerIcon, size: 16),
               ),
               ToolbarIconButton(
                 tooltip: t.editor.pens.pencil,
@@ -465,18 +486,6 @@ class _ToolbarState extends State<Toolbar> {
                 ),
               ),
               ToolbarIconButton(
-                tooltip: t.editor.pens.laserPointer,
-                selected:
-                    widget.currentTool == LaserPointer.currentLaserPointer,
-                enabled: true, // even in read-only mode
-                onPressed: () {
-                  toolOptionsType.value = .hide;
-                  widget.setTool(LaserPointer.currentLaserPointer);
-                },
-                padding: buttonPadding,
-                child: const Icon(Symbols.stylus_laser_pointer),
-              ),
-              ToolbarIconButton(
                 tooltip: t.editor.toolbar.photo,
                 enabled: !widget.readOnly,
                 onPressed: widget.pickPhoto,
@@ -496,6 +505,18 @@ class _ToolbarState extends State<Toolbar> {
                   icon: Icons.text_fields,
                   cupertinoIcon: CupertinoIcons.text_cursor,
                 ),
+              ),
+              ToolbarIconButton(
+                tooltip: t.editor.pens.laserPointer,
+                selected:
+                    widget.currentTool == LaserPointer.currentLaserPointer,
+                enabled: true, // even in read-only mode
+                onPressed: () {
+                  toolOptionsType.value = .hide;
+                  widget.setTool(LaserPointer.currentLaserPointer);
+                },
+                padding: buttonPadding,
+                child: const Icon(Symbols.stylus_laser_pointer),
               ),
               // ─── separator: drawing tools ▸ drawing toggles ───
               _ToolbarGroupSeparator(vertical: isToolbarVertical),
@@ -536,6 +557,19 @@ class _ToolbarState extends State<Toolbar> {
                     onPressed: widget.toggleOrthoDrawing,
                     padding: buttonPadding,
                     child: const Icon(Symbols.square_foot),
+                  );
+                },
+              ),
+              ValueListenableBuilder(
+                valueListenable: stows.editorShapeMode,
+                builder: (context, value, child) {
+                  return ToolbarIconButton(
+                    tooltip: t.editor.toolbar.toggleShapeMode,
+                    selected: value,
+                    enabled: !widget.readOnly,
+                    onPressed: widget.toggleShapeMode,
+                    padding: buttonPadding,
+                    child: const FaIcon(ShapePen.shapePenIcon, size: 16),
                   );
                 },
               ),
@@ -647,7 +681,7 @@ class _ToolbarState extends State<Toolbar> {
   }
 }
 
-enum ToolOptions { hide, pen, highlighter, pencil, select }
+enum ToolOptions { hide, pen, highlighter, pencil, select, eraser }
 
 /// Visual divider between toolbar groups. Becomes a thin horizontal line in
 /// vertical toolbars and a thin vertical line in horizontal toolbars.

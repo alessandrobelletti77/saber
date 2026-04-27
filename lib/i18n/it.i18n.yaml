@@ -268,6 +268,8 @@ editor:
     toggleFingerDrawing: Attiva/disattiva il disegno con il dito (Ctrl F)
     toggleFingerTouchDisabled: Disabilita completamente il tocco delle dita (solo stilo)
     toggleOrthoDrawing: Disegno ortogonale (snap a 0°/45°/90°)
+    toggleShapeMode: Riconoscimento forme (linea/rettangolo/cerchio/triangolo)
+    toggleEraserKeepActive: Mantieni gomma sempre attiva (no auto-disattivazione)
     togglePropertiesPanel: Mostra/nascondi pannello proprietà
     undo: Annulla
     redo: Rifai
@@ -277,12 +279,18 @@ editor:
   pens:
     fountainPen: Penna stilografica
     ballpointPen: Penna a sfera
+    brush: Pennello
+    roundTipMarker: Pennarello (punta tonda)
+    squareTipMarker: Pennarello (punta quadra)
     highlighter: Evidenziatore
     pencil: Matita
     shapePen: Penna per le forme
     laserPointer: Puntatore laser
   penOptions:
     size: Dimensione
+    hardness: Durezza
+  eraserOptions:
+    keepActive: Mantieni gomma sempre attiva
   colors:
     colorPicker: Selettore di colori
     customBrightnessHue: Personalizzato $b $h

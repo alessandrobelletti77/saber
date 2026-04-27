@@ -217,6 +217,7 @@ class _TranslationsEditorIt extends TranslationsEditorEn {
 	@override late final _TranslationsEditorToolbarIt toolbar = _TranslationsEditorToolbarIt._(_root);
 	@override late final _TranslationsEditorPensIt pens = _TranslationsEditorPensIt._(_root);
 	@override late final _TranslationsEditorPenOptionsIt penOptions = _TranslationsEditorPenOptionsIt._(_root);
+	@override late final _TranslationsEditorEraserOptionsIt eraserOptions = _TranslationsEditorEraserOptionsIt._(_root);
 	@override late final _TranslationsEditorColorsIt colors = _TranslationsEditorColorsIt._(_root);
 	@override late final _TranslationsEditorImageOptionsIt imageOptions = _TranslationsEditorImageOptionsIt._(_root);
 	@override late final _TranslationsEditorSelectionBarIt selectionBar = _TranslationsEditorSelectionBarIt._(_root);
@@ -652,6 +653,8 @@ class _TranslationsEditorToolbarIt extends TranslationsEditorToolbarEn {
 	@override String get toggleFingerDrawing => 'Attiva/disattiva il disegno con il dito (Ctrl F)';
 	@override String get toggleFingerTouchDisabled => 'Disabilita completamente il tocco delle dita (solo stilo)';
 	@override String get toggleOrthoDrawing => 'Disegno ortogonale (snap a 0°/45°/90°)';
+	@override String get toggleShapeMode => 'Riconoscimento forme (linea/rettangolo/cerchio/triangolo)';
+	@override String get toggleEraserKeepActive => 'Mantieni gomma sempre attiva (no auto-disattivazione)';
 	@override String get togglePropertiesPanel => 'Mostra/nascondi pannello proprietà';
 	@override String get undo => 'Annulla';
 	@override String get redo => 'Rifai';
@@ -669,6 +672,9 @@ class _TranslationsEditorPensIt extends TranslationsEditorPensEn {
 	// Translations
 	@override String get fountainPen => 'Penna stilografica';
 	@override String get ballpointPen => 'Penna a sfera';
+	@override String get brush => 'Pennello';
+	@override String get roundTipMarker => 'Pennarello (punta tonda)';
+	@override String get squareTipMarker => 'Pennarello (punta quadra)';
 	@override String get highlighter => 'Evidenziatore';
 	@override String get pencil => 'Matita';
 	@override String get shapePen => 'Penna per le forme';
@@ -683,6 +689,17 @@ class _TranslationsEditorPenOptionsIt extends TranslationsEditorPenOptionsEn {
 
 	// Translations
 	@override String get size => 'Dimensione';
+	@override String get hardness => 'Durezza';
+}
+
+// Path: editor.eraserOptions
+class _TranslationsEditorEraserOptionsIt extends TranslationsEditorEraserOptionsEn {
+	_TranslationsEditorEraserOptionsIt._(TranslationsIt root) : this._root = root, super.internal(root);
+
+	final TranslationsIt _root; // ignore: unused_field
+
+	// Translations
+	@override String get keepActive => 'Mantieni gomma sempre attiva';
 }
 
 // Path: editor.colors
