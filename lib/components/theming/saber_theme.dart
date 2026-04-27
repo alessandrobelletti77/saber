@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:saber/components/theming/yaru_builder.dart';
+import 'package:saber/data/dodo_colors.dart';
 import 'package:saber/data/prefs.dart';
 import 'package:sbn/font_fallbacks.dart';
 import 'package:yaru/yaru.dart';
@@ -22,6 +23,9 @@ abstract class SaberTheme {
       cardTheme: _Components.cardTheme(colorScheme),
       cupertinoOverrideTheme: _Components.cupertinoOverrideTheme,
       appBarTheme: _Components.appBarTheme,
+      scaffoldBackgroundColor: colorScheme.brightness == Brightness.dark
+          ? DodoColors.programDark
+          : null, // null = default (colorScheme.surface) for light mode
     );
   }
 

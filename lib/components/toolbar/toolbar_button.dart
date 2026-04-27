@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:saber/data/dodo_colors.dart';
 
 class ToolbarIconButton extends StatelessWidget {
   const ToolbarIconButton({
@@ -22,10 +23,17 @@ class ToolbarIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = ColorScheme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    // Buttons fill with the same color the AppBar uses in dark mode (the
+    // default Material 3 AppBar background = colorScheme.surface) so that
+    // controls read consistently as part of the app chrome.
+    final unselectedFill = isDark ? colorScheme.surface : Colors.transparent;
     final backgroundColor = WidgetStateProperty.resolveWith((states) {
-      if (states.contains(WidgetState.disabled) ||
-          !states.contains(WidgetState.selected)) {
-        return Colors.transparent;
+      if (states.contains(WidgetState.disabled)) {
+        return unselectedFill;
+      }
+      if (!states.contains(WidgetState.selected)) {
+        return unselectedFill;
       }
       return colorScheme.primary;
     });

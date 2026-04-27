@@ -46,6 +46,7 @@ class Toolbar extends StatefulWidget {
     required this.toggleFingerDrawing,
     required this.toggleFingerTouchDisabled,
     required this.toggleOrthoDrawing,
+    required this.togglePropertiesPanel,
     required this.pickPhoto,
     required this.paste,
     required this.duplicateSelection,
@@ -53,7 +54,20 @@ class Toolbar extends StatefulWidget {
     required this.exportAsSba,
     required this.exportAsPdf,
     required this.exportAsPng,
+    this.showOnlyActions = false,
+    this.hideActions = false,
   });
+
+  /// When true, this Toolbar renders ONLY group 3 (page actions: fullscreen,
+  /// undo/redo, share/export). Used to display the page-action group on the
+  /// right side under the properties panel while the main toolbar (groups 1+2)
+  /// stays centered under the canvas.
+  final bool showOnlyActions;
+
+  /// When true, this Toolbar HIDES group 3 (page actions). Used by the main
+  /// toolbar when the properties panel is open and the action group has been
+  /// moved to a separate Toolbar instance on the right side.
+  final bool hideActions;
 
   final bool readOnly;
 
@@ -73,6 +87,7 @@ class Toolbar extends StatefulWidget {
   final VoidCallback toggleFingerDrawing;
   final VoidCallback toggleFingerTouchDisabled;
   final VoidCallback toggleOrthoDrawing;
+  final VoidCallback togglePropertiesPanel;
 
   final VoidCallback pickPhoto;
 
@@ -331,6 +346,7 @@ class _ToolbarState extends State<Toolbar> {
             alignment: WrapAlignment.center,
             runSpacing: 8,
             children: [
+              if (!widget.showOnlyActions) ...[
               ToolbarIconButton(
                 tooltip: t.editor.toolbar.toggleEraser,
                 selected: widget.currentTool is Eraser,
@@ -481,6 +497,8 @@ class _ToolbarState extends State<Toolbar> {
                   cupertinoIcon: CupertinoIcons.text_cursor,
                 ),
               ),
+              // ─── separator: drawing tools ▸ drawing toggles ───
+              _ToolbarGroupSeparator(vertical: isToolbarVertical),
               if (!stows.hideFingerDrawingToggle.value)
                 ValueListenableBuilder(
                   valueListenable: stows.editorFingerDrawing,
@@ -521,6 +539,24 @@ class _ToolbarState extends State<Toolbar> {
                   );
                 },
               ),
+              ValueListenableBuilder(
+                valueListenable: stows.editorPropertiesPanelOpen,
+                builder: (context, value, child) {
+                  return ToolbarIconButton(
+                    tooltip: t.editor.toolbar.togglePropertiesPanel,
+                    selected: value,
+                    enabled: true,
+                    onPressed: widget.togglePropertiesPanel,
+                    padding: buttonPadding,
+                    child: const Icon(Icons.tune),
+                  );
+                },
+              ),
+              ], // end of groups 1+2 (only shown when !showOnlyActions)
+              if (!widget.showOnlyActions &&
+                  !widget.hideActions) // separator before group 3
+                _ToolbarGroupSeparator(vertical: isToolbarVertical),
+              if (widget.showOnlyActions || !widget.hideActions) ...[
               ToolbarIconButton(
                 tooltip: t.editor.toolbar.fullscreen,
                 selected: DynamicMaterialApp.isFullscreen,
@@ -578,6 +614,7 @@ class _ToolbarState extends State<Toolbar> {
                   cupertinoIcon: CupertinoIcons.share,
                 ),
               ),
+              ], // end of group 3 (only shown when showOnlyActions)
             ],
           ),
         ),
@@ -611,3 +648,33 @@ class _ToolbarState extends State<Toolbar> {
 }
 
 enum ToolOptions { hide, pen, highlighter, pencil, select }
+
+/// Visual divider between toolbar groups. Becomes a thin horizontal line in
+/// vertical toolbars and a thin vertical line in horizontal toolbars.
+class _ToolbarGroupSeparator extends StatelessWidget {
+  const _ToolbarGroupSeparator({required this.vertical});
+
+  /// True when the toolbar itself is vertical (separator is then horizontal).
+  final bool vertical;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = ColorScheme.of(context).outlineVariant;
+    if (vertical) {
+      return Padding(
+        padding: const .symmetric(vertical: 6),
+        child: SizedBox(
+          width: 32,
+          child: Divider(color: color, thickness: 1, height: 1),
+        ),
+      );
+    }
+    return Padding(
+      padding: const .symmetric(horizontal: 6),
+      child: SizedBox(
+        height: 32,
+        child: VerticalDivider(color: color, thickness: 1, width: 1),
+      ),
+    );
+  }
+}

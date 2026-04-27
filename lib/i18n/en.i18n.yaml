@@ -268,6 +268,7 @@ editor:
     toggleFingerDrawing: Toggle finger drawing (Ctrl F)
     toggleFingerTouchDisabled: Disable finger touch entirely (stylus only)
     toggleOrthoDrawing: Orthogonal drawing (snap to 0°/45°/90°)
+    togglePropertiesPanel: Show/hide properties panel
     undo: Undo
     redo: Redo
     export: Export (Ctrl Shift S)
@@ -322,6 +323,7 @@ editor:
   menu:
     clearPage: Clear page $page/$totalPages
     clearAllPages: Clear all pages
+    rotatePage: Rotate page 90°
     insertPage: Insert page below
     duplicatePage: Duplicate page
     deletePage: Delete page
@@ -350,6 +352,16 @@ editor:
       cornell: Cornell
       mmGraph: Engineering (mm graph)
       grid5mm: 5×5 mm grid
+  properties:
+    title: Properties
+    color: Color
+    size: Size
+    pressure: Pressure
+    eraserActive: Eraser active. Tap a stroke to remove it.
+    selectActive: Select tool active. Circle objects to select them.
+    laserActive: Laser pointer active. Strokes fade out shortly.
+    noTool: No tool selected.
+    advancedHint: Line style, transparency and other advanced properties will be added soon.
   readOnlyBanner:
     title: Read-only mode
     watchingServer: You are currently watching for updates on the server. Editing is disabled in this mode.

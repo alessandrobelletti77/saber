@@ -150,6 +150,11 @@ class Stows {
     false,
     volatile: !_isOnMainIsolate,
   );
+  final editorPropertiesPanelOpen = PlainStow(
+    'editorPropertiesPanelOpen',
+    false,
+    volatile: !_isOnMainIsolate,
+  );
   final editorAutoInvert = PlainStow(
     'editorAutoInvert',
     true,

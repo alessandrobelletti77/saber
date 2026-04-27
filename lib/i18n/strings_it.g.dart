@@ -221,6 +221,7 @@ class _TranslationsEditorIt extends TranslationsEditorEn {
 	@override late final _TranslationsEditorImageOptionsIt imageOptions = _TranslationsEditorImageOptionsIt._(_root);
 	@override late final _TranslationsEditorSelectionBarIt selectionBar = _TranslationsEditorSelectionBarIt._(_root);
 	@override late final _TranslationsEditorMenuIt menu = _TranslationsEditorMenuIt._(_root);
+	@override late final _TranslationsEditorPropertiesIt properties = _TranslationsEditorPropertiesIt._(_root);
 	@override late final _TranslationsEditorReadOnlyBannerIt readOnlyBanner = _TranslationsEditorReadOnlyBannerIt._(_root);
 	@override late final _TranslationsEditorVersionTooNewIt versionTooNew = _TranslationsEditorVersionTooNewIt._(_root);
 	@override late final _TranslationsEditorQuillIt quill = _TranslationsEditorQuillIt._(_root);
@@ -651,6 +652,7 @@ class _TranslationsEditorToolbarIt extends TranslationsEditorToolbarEn {
 	@override String get toggleFingerDrawing => 'Attiva/disattiva il disegno con il dito (Ctrl F)';
 	@override String get toggleFingerTouchDisabled => 'Disabilita completamente il tocco delle dita (solo stilo)';
 	@override String get toggleOrthoDrawing => 'Disegno ortogonale (snap a 0°/45°/90°)';
+	@override String get togglePropertiesPanel => 'Mostra/nascondi pannello proprietà';
 	@override String get undo => 'Annulla';
 	@override String get redo => 'Rifai';
 	@override String get export => 'Esporta (Ctrl Shift S)';
@@ -753,6 +755,7 @@ class _TranslationsEditorMenuIt extends TranslationsEditorMenuEn {
 	// Translations
 	@override String clearPage({required Object page, required Object totalPages}) => 'Pulisci pagina ${page}/${totalPages}';
 	@override String get clearAllPages => 'Pulisci tutte le pagine';
+	@override String get rotatePage => 'Ruota pagina 90°';
 	@override String get insertPage => 'Inserisci pagina sotto';
 	@override String get duplicatePage => 'Duplica pagina';
 	@override String get deletePage => 'Elimina pagina';
@@ -767,6 +770,24 @@ class _TranslationsEditorMenuIt extends TranslationsEditorMenuEn {
 	@override String get watchServerReadOnly => 'La modifica è disabilitata mentre si controlla il server';
 	@override late final _TranslationsEditorMenuBoxFitsIt boxFits = _TranslationsEditorMenuBoxFitsIt._(_root);
 	@override late final _TranslationsEditorMenuBgPatternsIt bgPatterns = _TranslationsEditorMenuBgPatternsIt._(_root);
+}
+
+// Path: editor.properties
+class _TranslationsEditorPropertiesIt extends TranslationsEditorPropertiesEn {
+	_TranslationsEditorPropertiesIt._(TranslationsIt root) : this._root = root, super.internal(root);
+
+	final TranslationsIt _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Proprietà';
+	@override String get color => 'Colore';
+	@override String get size => 'Dimensione';
+	@override String get pressure => 'Pressione';
+	@override String get eraserActive => 'Gomma attiva. Tocca un tratto per cancellarlo.';
+	@override String get selectActive => 'Strumento Seleziona attivo. Cerchia gli oggetti per selezionarli.';
+	@override String get laserActive => 'Puntatore laser attivo. I tratti scompaiono dopo un attimo.';
+	@override String get noTool => 'Nessuno strumento selezionato.';
+	@override String get advancedHint => 'Stile linea, trasparenza e altre proprietà avanzate verranno aggiunte presto.';
 }
 
 // Path: editor.readOnlyBanner

@@ -305,6 +305,7 @@ class TranslationsEditorEn {
 	late final TranslationsEditorImageOptionsEn imageOptions = TranslationsEditorImageOptionsEn.internal(_root);
 	late final TranslationsEditorSelectionBarEn selectionBar = TranslationsEditorSelectionBarEn.internal(_root);
 	late final TranslationsEditorMenuEn menu = TranslationsEditorMenuEn.internal(_root);
+	late final TranslationsEditorPropertiesEn properties = TranslationsEditorPropertiesEn.internal(_root);
 	late final TranslationsEditorReadOnlyBannerEn readOnlyBanner = TranslationsEditorReadOnlyBannerEn.internal(_root);
 	late final TranslationsEditorVersionTooNewEn versionTooNew = TranslationsEditorVersionTooNewEn.internal(_root);
 	late final TranslationsEditorQuillEn quill = TranslationsEditorQuillEn.internal(_root);
@@ -1037,6 +1038,9 @@ class TranslationsEditorToolbarEn {
 	/// en: 'Orthogonal drawing (snap to 0°/45°/90°)'
 	String get toggleOrthoDrawing => 'Orthogonal drawing (snap to 0°/45°/90°)';
 
+	/// en: 'Show/hide properties panel'
+	String get togglePropertiesPanel => 'Show/hide properties panel';
+
 	/// en: 'Undo'
 	String get undo => 'Undo';
 
@@ -1235,6 +1239,9 @@ class TranslationsEditorMenuEn {
 	/// en: 'Clear all pages'
 	String get clearAllPages => 'Clear all pages';
 
+	/// en: 'Rotate page 90°'
+	String get rotatePage => 'Rotate page 90°';
+
 	/// en: 'Insert page below'
 	String get insertPage => 'Insert page below';
 
@@ -1273,6 +1280,42 @@ class TranslationsEditorMenuEn {
 
 	late final TranslationsEditorMenuBoxFitsEn boxFits = TranslationsEditorMenuBoxFitsEn.internal(_root);
 	late final TranslationsEditorMenuBgPatternsEn bgPatterns = TranslationsEditorMenuBgPatternsEn.internal(_root);
+}
+
+// Path: editor.properties
+class TranslationsEditorPropertiesEn {
+	TranslationsEditorPropertiesEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Properties'
+	String get title => 'Properties';
+
+	/// en: 'Color'
+	String get color => 'Color';
+
+	/// en: 'Size'
+	String get size => 'Size';
+
+	/// en: 'Pressure'
+	String get pressure => 'Pressure';
+
+	/// en: 'Eraser active. Tap a stroke to remove it.'
+	String get eraserActive => 'Eraser active. Tap a stroke to remove it.';
+
+	/// en: 'Select tool active. Circle objects to select them.'
+	String get selectActive => 'Select tool active. Circle objects to select them.';
+
+	/// en: 'Laser pointer active. Strokes fade out shortly.'
+	String get laserActive => 'Laser pointer active. Strokes fade out shortly.';
+
+	/// en: 'No tool selected.'
+	String get noTool => 'No tool selected.';
+
+	/// en: 'Line style, transparency and other advanced properties will be added soon.'
+	String get advancedHint => 'Line style, transparency and other advanced properties will be added soon.';
 }
 
 // Path: editor.readOnlyBanner

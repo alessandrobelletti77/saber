@@ -4,6 +4,7 @@ import 'package:saber/components/canvas/canvas_background_preview.dart';
 import 'package:saber/components/canvas/canvas_image_dialog.dart';
 import 'package:saber/components/canvas/inner_canvas.dart';
 import 'package:saber/data/editor/editor_core_info.dart';
+import 'package:saber/data/dodo_colors.dart';
 import 'package:saber/data/editor/page.dart';
 import 'package:saber/data/extensions/list_extensions.dart';
 import 'package:saber/data/prefs.dart';
@@ -25,6 +26,7 @@ class EditorBottomSheet extends StatefulWidget {
     required this.redrawImage,
     required this.clearPage,
     required this.clearAllPages,
+    required this.rotatePage,
     required this.redrawAndSave,
     required this.pickPhotos,
     required this.importPdf,
@@ -43,6 +45,7 @@ class EditorBottomSheet extends StatefulWidget {
   final VoidCallback redrawImage;
   final VoidCallback clearPage;
   final VoidCallback clearAllPages;
+  final VoidCallback rotatePage;
   final VoidCallback redrawAndSave;
   final Future<int> Function() pickPhotos;
   final Future<bool> Function() importPdf;
@@ -81,43 +84,69 @@ class _EditorBottomSheetState extends State<EditorBottomSheet> {
             const SizedBox(height: 16),
             Wrap(
               spacing: 8,
+              runSpacing: 8,
               children: [
-                ElevatedButton(
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.surface,
+                    foregroundColor: Theme.of(context).colorScheme.onSurface,
+                    side: const BorderSide(color: Colors.redAccent, width: 2),
+                    padding: const .symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                  ),
                   onPressed: widget.coreInfo.isNotEmpty
                       ? () {
                           widget.clearPage();
                           Navigator.pop(context);
                         }
                       : null,
-                  child: Wrap(
-                    children: [
-                      const Icon(Icons.cleaning_services),
-                      const SizedBox(width: 8),
-                      Text(
-                        t.editor.menu.clearPage(
-                          page: widget.currentPageIndex == null
-                              ? '?'
-                              : widget.currentPageIndex! + 1,
-                          totalPages: widget.coreInfo.pages.length,
-                        ),
-                      ),
-                    ],
+                  icon: const Icon(Icons.cleaning_services),
+                  label: Text(
+                    t.editor.menu.clearPage(
+                      page: widget.currentPageIndex == null
+                          ? '?'
+                          : widget.currentPageIndex! + 1,
+                      totalPages: widget.coreInfo.pages.length,
+                    ),
                   ),
                 ),
-                ElevatedButton(
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.surface,
+                    foregroundColor: Theme.of(context).colorScheme.onSurface,
+                    side: const BorderSide(color: Colors.red, width: 2),
+                    padding: const .symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                  ),
                   onPressed: widget.coreInfo.isNotEmpty
                       ? () {
                           widget.clearAllPages();
                           Navigator.pop(context);
                         }
                       : null,
-                  child: Wrap(
-                    children: [
-                      const Icon(Icons.cleaning_services),
-                      const SizedBox(width: 8),
-                      Text(t.editor.menu.clearAllPages),
-                    ],
+                  icon: const Icon(Icons.delete_sweep),
+                  label: Text(t.editor.menu.clearAllPages),
+                ),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.surface,
+                    foregroundColor: Theme.of(context).colorScheme.onSurface,
+                    side: const BorderSide(color: Colors.blueAccent, width: 2),
+                    padding: const .symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
                   ),
+                  onPressed: () {
+                    widget.rotatePage();
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.rotate_90_degrees_cw),
+                  label: Text(t.editor.menu.rotatePage),
                 ),
               ],
             ),

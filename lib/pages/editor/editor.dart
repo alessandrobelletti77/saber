@@ -22,7 +22,9 @@ import 'package:saber/components/canvas/canvas_gesture_detector.dart';
 import 'package:saber/components/canvas/canvas_image.dart';
 import 'package:saber/components/canvas/image/editor_image.dart';
 import 'package:saber/components/canvas/save_indicator.dart';
+import 'package:saber/components/editor/properties_panel.dart';
 import 'package:saber/components/editor/read_only_banner.dart';
+import 'package:saber/data/dodo_colors.dart';
 import 'package:saber/components/theming/adaptive_alert_dialog.dart';
 import 'package:saber/components/theming/adaptive_icon.dart';
 import 'package:saber/components/theming/dynamic_material_app.dart';
@@ -1451,7 +1453,10 @@ class EditorState extends State<Editor> {
           : null,
     );
 
-    final Widget toolbar = Collapsible(
+    Widget buildToolbar({
+      bool showOnlyActions = false,
+      bool hideActions = false,
+    }) => Collapsible(
       axis: isToolbarVertical
           ? CollapsibleAxis.horizontal
           : CollapsibleAxis.vertical,
@@ -1462,6 +1467,8 @@ class EditorState extends State<Editor> {
       child: SafeArea(
         bottom: stows.editorToolbarAlignment.value != AxisDirection.up,
         child: Toolbar(
+          showOnlyActions: showOnlyActions,
+          hideActions: hideActions,
           readOnly: coreInfo.readOnly,
           setTool: (tool) {
             setState(() {
@@ -1643,6 +1650,10 @@ class EditorState extends State<Editor> {
             stows.editorOrthoDrawing.value =
                 !stows.editorOrthoDrawing.value;
           },
+          togglePropertiesPanel: () {
+            stows.editorPropertiesPanelOpen.value =
+                !stows.editorPropertiesPanelOpen.value;
+          },
           pickPhoto: _pickPhotos,
           paste: paste,
           exportAsSba: exportAsSba,
@@ -1652,37 +1663,73 @@ class EditorState extends State<Editor> {
       ),
     );
 
-    final Widget body;
-    if (isToolbarVertical) {
-      body = Row(
-        textDirection: stows.editorToolbarAlignment.value == AxisDirection.left
-            ? .ltr
-            : .rtl,
-        children: [
-          toolbar,
-          Expanded(
-            child: Column(
-              children: [
-                Expanded(child: canvas),
-                readonlyBanner,
-              ],
+    // Layout reacts to the properties-panel toggle:
+    // - Panel CLOSED → main toolbar shows all 3 groups (full width). No right
+    //   column. Canvas takes full width.
+    // - Panel OPEN  → main toolbar shows only groups 1+2 (canvas-aligned).
+    //   Right column (280 wide) contains the panel above and the actions
+    //   toolbar (group 3) below it.
+    final body = ValueListenableBuilder<bool>(
+      valueListenable: stows.editorPropertiesPanelOpen,
+      builder: (context, isPanelOpen, _) {
+        final mainToolbar = buildToolbar(hideActions: isPanelOpen);
+
+        final Widget editingArea;
+        if (isToolbarVertical) {
+          editingArea = Row(
+            textDirection:
+                stows.editorToolbarAlignment.value == AxisDirection.left
+                ? .ltr
+                : .rtl,
+            children: [
+              mainToolbar,
+              Expanded(
+                child: Column(
+                  children: [
+                    Expanded(child: canvas),
+                    readonlyBanner,
+                  ],
+                ),
+              ),
+            ],
+          );
+        } else {
+          editingArea = Column(
+            verticalDirection:
+                stows.editorToolbarAlignment.value == AxisDirection.up
+                ? VerticalDirection.up
+                : VerticalDirection.down,
+            children: [
+              Expanded(child: canvas),
+              mainToolbar,
+              readonlyBanner,
+            ],
+          );
+        }
+
+        if (!isPanelOpen) {
+          return editingArea;
+        }
+
+        // Panel open: split layout with right column.
+        final actionsToolbar = buildToolbar(showOnlyActions: true);
+        return Row(
+          children: [
+            Expanded(child: editingArea),
+            SizedBox(
+              width: PropertiesPanel.width,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Expanded(child: PropertiesPanel(currentTool: currentTool)),
+                  actionsToolbar,
+                ],
+              ),
             ),
-          ),
-        ],
-      );
-    } else {
-      body = Column(
-        verticalDirection:
-            stows.editorToolbarAlignment.value == AxisDirection.up
-            ? VerticalDirection.up
-            : VerticalDirection.down,
-        children: [
-          Expanded(child: canvas),
-          toolbar,
-          readonlyBanner,
-        ],
-      );
-    }
+          ],
+        );
+      },
+    );
 
     return ValueListenableBuilder(
       valueListenable: savingState,
@@ -1707,6 +1754,12 @@ class EditorState extends State<Editor> {
         );
       },
       child: Scaffold(
+        // Editor working area gets a slightly lighter blue than the rest of
+        // the app (defined in SaberTheme) for visual hierarchy. Both are
+        // overridden only in dark mode; light mode keeps default surfaces.
+        backgroundColor: Theme.of(context).brightness == Brightness.dark
+            ? DodoColors.editorWorkArea
+            : null,
         appBar: DynamicMaterialApp.isFullscreen
             ? null
             : AppBar(
@@ -1861,6 +1914,12 @@ class EditorState extends State<Editor> {
         clearPage(currentPageIndex);
       },
       clearAllPages: clearAllPages,
+      rotatePage: () => setState(() {
+        if (coreInfo.readOnly) return;
+        if (currentPageIndex >= coreInfo.pages.length) return;
+        coreInfo.pages[currentPageIndex].rotate90Clockwise();
+        autosaveAfterDelay();
+      }),
       redrawAndSave: () => setState(() {
         if (coreInfo.readOnly) return;
         autosaveAfterDelay();

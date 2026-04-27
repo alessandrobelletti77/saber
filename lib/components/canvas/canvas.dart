@@ -91,10 +91,15 @@ class Canvas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Match the rounded corners used by the home-screen preview cards so the
+    // editor's "page" reads as a sheet of paper with smooth edges, not a
+    // hard rectangle.
+    const pageRadius = BorderRadius.all(Radius.circular(12));
     return Center(
       child: FittedBox(
         child: DecoratedBox(
           decoration: BoxDecoration(
+            borderRadius: pageRadius,
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(
@@ -109,25 +114,30 @@ class Canvas extends StatelessWidget {
               ? SizedBox(
                   width: page.size.width,
                   height: page.size.height,
-                  child: OnyxSdkPenArea(
-                    refreshDelay: const Duration(seconds: 1),
-                    strokeStyle: getOnyxTool(currentTool),
-                    strokeColor: getOnyxColor(),
-                    strokeWidth: getOnyxWidth(),
-                    child: InnerCanvas(
-                      key: page.innerCanvasKey,
-                      pageIndex: pageIndex,
-                      redrawPageListenable: page,
-                      width: page.size.width,
-                      height: page.size.height,
-                      textEditing: textEditing,
-                      coreInfo: coreInfo,
-                      currentStroke: currentStroke,
-                      currentStrokeDetectedShape: currentStrokeDetectedShape,
-                      currentSelection: currentSelection,
-                      setAsBackground: setAsBackground,
-                      currentToolIsSelect: currentTool.toolId == ToolId.select,
-                      currentScale: currentScale,
+                  child: ClipRRect(
+                    borderRadius: pageRadius,
+                    child: OnyxSdkPenArea(
+                      refreshDelay: const Duration(seconds: 1),
+                      strokeStyle: getOnyxTool(currentTool),
+                      strokeColor: getOnyxColor(),
+                      strokeWidth: getOnyxWidth(),
+                      child: InnerCanvas(
+                        key: page.innerCanvasKey,
+                        pageIndex: pageIndex,
+                        redrawPageListenable: page,
+                        width: page.size.width,
+                        height: page.size.height,
+                        textEditing: textEditing,
+                        coreInfo: coreInfo,
+                        currentStroke: currentStroke,
+                        currentStrokeDetectedShape:
+                            currentStrokeDetectedShape,
+                        currentSelection: currentSelection,
+                        setAsBackground: setAsBackground,
+                        currentToolIsSelect:
+                            currentTool.toolId == ToolId.select,
+                        currentScale: currentScale,
+                      ),
                     ),
                   ),
                 )

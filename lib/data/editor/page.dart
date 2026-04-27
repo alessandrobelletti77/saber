@@ -22,7 +22,23 @@ class EditorPage extends ChangeNotifier implements HasSize {
   static const defaultSize = Size(defaultWidth, defaultHeight);
 
   @override
-  final Size size;
+  Size size;
+
+  /// Rotates this page 90° clockwise: swaps width and height and transforms
+  /// every stroke's coordinates so they map onto the new orientation.
+  /// Images, background image and quill text are NOT rotated yet (they keep
+  /// their absolute coordinates and may end up partially out of bounds —
+  /// the user can move them manually).
+  void rotate90Clockwise() {
+    final oldHeight = size.height;
+    size = Size(oldHeight, size.width);
+    for (final stroke in strokes) {
+      stroke.rotate90Clockwise(oldHeight);
+    }
+    // reset the cached renderBox: the layout will change
+    isRendered = false;
+    notifyListeners();
+  }
 
   late final CanvasKey innerCanvasKey = CanvasKey();
   RenderBox? _renderBox;

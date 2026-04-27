@@ -55,6 +55,17 @@ class Stroke {
     _highQualityPath = _highQualityPath?.shift(offset);
   }
 
+  /// Rotates this stroke's points 90° clockwise around the page origin.
+  /// `oldHeight` is the page's height *before* the rotation. After rotation,
+  /// the page's new width equals `oldHeight`. Used by [EditorPage.rotate90Clockwise].
+  void rotate90Clockwise(double oldHeight) {
+    for (int i = 0; i < points.length; i++) {
+      final p = points[i];
+      points[i] = PointVector(oldHeight - p.dy, p.dx, p.pressure);
+    }
+    markPolygonNeedsUpdating();
+  }
+
   void markPolygonNeedsUpdating() {
     _lowQualityPolygon = null;
     _highQualityPolygon = null;

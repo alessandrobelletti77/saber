@@ -268,6 +268,7 @@ editor:
     toggleFingerDrawing: Attiva/disattiva il disegno con il dito (Ctrl F)
     toggleFingerTouchDisabled: Disabilita completamente il tocco delle dita (solo stilo)
     toggleOrthoDrawing: Disegno ortogonale (snap a 0°/45°/90°)
+    togglePropertiesPanel: Mostra/nascondi pannello proprietà
     undo: Annulla
     redo: Rifai
     export: Esporta (Ctrl Shift S)
@@ -322,6 +323,7 @@ editor:
   menu:
     clearPage: Pulisci pagina $page/$totalPages
     clearAllPages: Pulisci tutte le pagine
+    rotatePage: Ruota pagina 90°
     insertPage: Inserisci pagina sotto
     duplicatePage: Duplica pagina
     deletePage: Elimina pagina
@@ -350,6 +352,16 @@ editor:
       cornell: Metodo Cornell
       mmGraph: Carta millimetrata
       grid5mm: Quadrettatura 5×5 mm
+  properties:
+    title: Proprietà
+    color: Colore
+    size: Dimensione
+    pressure: Pressione
+    eraserActive: Gomma attiva. Tocca un tratto per cancellarlo.
+    selectActive: Strumento Seleziona attivo. Cerchia gli oggetti per selezionarli.
+    laserActive: Puntatore laser attivo. I tratti scompaiono dopo un attimo.
+    noTool: Nessuno strumento selezionato.
+    advancedHint: Stile linea, trasparenza e altre proprietà avanzate verranno aggiunte presto.
   readOnlyBanner:
     title: Modalità di sola lettura
     watchingServer: Al momento stai monitorando gli aggiornamenti sul server. La modifica è disabilitata in questa modalità.
